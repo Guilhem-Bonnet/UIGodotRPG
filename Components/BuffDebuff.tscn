@@ -1,0 +1,56 @@
+[gd_scene load_steps=4 format=3 uid="uid://dudnacmgdp2f8"]
+
+[ext_resource type="Texture2D" uid="uid://cv2yga7c3ggom" path="res://icons/rework/GriffeZombie.png" id="1_pvvg1"]
+
+[sub_resource type="FontVariation" id="FontVariation_wb8bh"]
+variation_transform = Transform2D(1, -0.025, 0, 0.935, 0, 0)
+
+[sub_resource type="LabelSettings" id="LabelSettings_33i8a"]
+font = SubResource("FontVariation_wb8bh")
+font_size = 30
+
+[node name="BuffDebuff" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 120.0
+offset_bottom = 120.0
+color = Color(0.305882, 0.313726, 0.368627, 1)
+
+[node name="TextureButton" type="TextureButton" parent="."]
+layout_mode = 0
+offset_right = 120.0
+offset_bottom = 120.0
+texture_normal = ExtResource("1_pvvg1")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="TextureButton"]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 135.0
+offset_right = 208.0
+offset_bottom = 296.0
+text = "Description"
+
+[node name="Panel" type="Panel" parent="TextureButton"]
+modulate = Color(1, 1, 1, 0.513726)
+self_modulate = Color(1, 1, 1, 0.439216)
+layout_mode = 0
+offset_left = 2.0
+offset_top = 127.0
+offset_right = 215.0
+offset_bottom = 304.0
+
+[node name="Label_stack" type="Label" parent="."]
+layout_mode = 0
+offset_left = 72.0
+offset_top = 91.0
+offset_right = 123.0
+offset_bottom = 133.0
+text = "x2"
+label_settings = SubResource("LabelSettings_33i8a")
+visible_characters = 3
+visible_ratio = 1.5

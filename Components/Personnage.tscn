@@ -1,0 +1,204 @@
+[gd_scene load_steps=14 format=3 uid="uid://cxi1rod0fwbkg"]
+
+[ext_resource type="Script" path="res://addons/collapsible_container/collapsible_elements/collapsible_container.gd" id="1_mwjg6"]
+[ext_resource type="Script" path="res://Scripts/Life.cs" id="1_rwq7v"]
+[ext_resource type="Script" path="res://Components/PersonnageUIManager.cs" id="1_xmf7w"]
+[ext_resource type="Script" path="res://Scripts/check_button.gd" id="2_52bfe"]
+[ext_resource type="Texture2D" uid="uid://dp65inx4ekus6" path="res://icons/DALL·E 2024-10-26 10.29.24 - A detailed dark fantasy vampire icon. At the center, a sinister vampire with glowing red eyes and sharp fangs emerges from the shadows, wearing a flow.webp" id="2_qtpb0"]
+[ext_resource type="Script" path="res://Scripts/LogContainer.cs" id="4_co4fe"]
+[ext_resource type="PackedScene" uid="uid://c8qx2amveoynf" path="res://Components/LogComponent.tscn" id="4_eh6e2"]
+[ext_resource type="Texture2D" uid="uid://bntcsgwf3jqco" path="res://icons/DALL·E 2024-10-26 13.20.08 - An icon representing an attack in a detailed dark fantasy style. At the center, a sharp, glowing sword or blade is mid-swing, surrounded by dynamic mo.webp" id="4_vspjt"]
+[ext_resource type="Texture2D" uid="uid://clnu8rl60lopd" path="res://icons/DALL·E 2024-10-26 13.20.30 - An icon representing defense in a detailed dark fantasy style. At the center, a large, weathered shield with intricate engravings and glowing runes is.webp" id="5_deo5a"]
+[ext_resource type="Texture2D" uid="uid://deh4l4rutm5m2" path="res://icons/rework/Eaten.webp" id="6_a08xr"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_040yr"]
+bg_color = Color(0.327299, 0.327299, 0.327299, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i16gm"]
+bg_color = Color(0, 0.726049, 0.178815, 1)
+
+[sub_resource type="ImageTexture" id="ImageTexture_ot555"]
+
+[node name="Personnage" type="Control"]
+layout_mode = 3
+anchor_right = 0.873
+anchor_bottom = 1.671
+offset_right = 0.303955
+offset_bottom = 0.191895
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_xmf7w")
+
+[node name="TextEdit" type="TextEdit" parent="."]
+layout_mode = 0
+offset_left = 162.0
+offset_top = 83.8906
+offset_right = 335.0
+offset_bottom = 121.891
+text = "Name personnage"
+
+[node name="Label_ClasseName" type="Label" parent="."]
+layout_mode = 0
+offset_top = 255.0
+offset_right = 203.0
+offset_bottom = 299.0
+text = "Classe personnage"
+
+[node name="Sprite2DClasse" type="Sprite2D" parent="Label_ClasseName"]
+position = Vector2(79.5625, -96.5625)
+scale = Vector2(0.149536, 0.149536)
+texture = ExtResource("2_qtpb0")
+
+[node name="Label_Focus" type="Label" parent="."]
+layout_mode = 0
+offset_left = 724.0
+offset_top = 235.891
+offset_right = 773.0
+offset_bottom = 261.891
+text = "Cible :"
+
+[node name="Label_NameFocus" type="Label" parent="Label_Focus"]
+layout_mode = 0
+offset_left = 58.0
+offset_right = 153.0
+offset_bottom = 26.0
+text = "Name Focus"
+
+[node name="Label_Defense" type="Label" parent="."]
+layout_mode = 0
+offset_left = 726.884
+offset_top = 321.775
+offset_right = 855.884
+offset_bottom = 347.775
+text = "Défense contre :"
+
+[node name="Label_NameAttaquant" type="Label" parent="Label_Defense"]
+layout_mode = 0
+offset_left = 134.0
+offset_right = 229.0
+offset_bottom = 26.0
+text = "Name Attaquant"
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+layout_mode = 0
+offset_left = 164.0
+offset_top = 131.891
+offset_right = 633.0
+offset_bottom = 158.891
+theme_override_styles/background = SubResource("StyleBoxFlat_040yr")
+theme_override_styles/fill = SubResource("StyleBoxFlat_i16gm")
+value = 10.0
+script = ExtResource("1_rwq7v")
+
+[node name="Bonus" type="ItemList" parent="."]
+layout_mode = 0
+offset_left = 194.0
+offset_top = 167.891
+offset_right = 635.0
+offset_bottom = 214.891
+max_columns = 20
+
+[node name="Malus" type="ItemList" parent="."]
+layout_mode = 0
+offset_left = 194.0
+offset_top = 219.891
+offset_right = 635.0
+offset_bottom = 267.891
+max_columns = 20
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 164.0
+offset_top = 298.891
+offset_right = 278.0
+offset_bottom = 331.891
+text = "Spells"
+
+[node name="ItemList" type="ItemList" parent="Label"]
+layout_mode = 0
+offset_left = -1.0
+offset_top = 31.0
+offset_right = 470.0
+offset_bottom = 107.0
+item_count = 3
+max_columns = 10
+same_column_width = true
+fixed_column_width = 40
+item_0/text = "test"
+item_0/icon = SubResource("ImageTexture_ot555")
+item_1/text = "test"
+item_2/text = "test"
+
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 3.0
+offset_right = 497.0
+offset_bottom = 347.0
+color = Color(0, 0, 0, 0.588235)
+
+[node name="Sprite2D_Sword" type="Sprite2D" parent="."]
+position = Vector2(683, 270.891)
+scale = Vector2(0.0706026, 0.0706026)
+texture = ExtResource("4_vspjt")
+
+[node name="Sprite2D_Shield" type="Sprite2D" parent="."]
+position = Vector2(683, 352.775)
+scale = Vector2(0.071, 0.071)
+texture = ExtResource("5_deo5a")
+
+[node name="Sprite2D_DeathState" type="Sprite2D" parent="."]
+position = Vector2(713, 155.891)
+scale = Vector2(0.128693, 0.128693)
+texture = ExtResource("6_a08xr")
+
+[node name="CheckButton" type="CheckButton" parent="."]
+layout_mode = 0
+offset_left = 150.0
+offset_top = 433.891
+offset_right = 320.0
+offset_bottom = 464.891
+text = "Afficher les logs"
+script = ExtResource("2_52bfe")
+
+[node name="CollapsibleContainer" type="Control" parent="."]
+process_mode = 3
+editor_description = "
+			A custom/plugin Control node capable of hiding and revealing its children by folding and unfolding.
+			
+Give feedback at: https://github.com/ArshvirGoraya/Godot-Collapsible-Container"
+clip_contents = true
+custom_minimum_size = Vector2(493, 510)
+anchors_preset = 0
+offset_left = 155.0
+offset_top = 479.891
+offset_right = 648.0
+offset_bottom = 989.891
+size_flags_horizontal = 3
+size_flags_vertical = 0
+script = ExtResource("1_mwjg6")
+folding_direction_preset = 14
+sizing_constraint = 1
+auto_update_size = 0
+sizing_node = NodePath("ScrollContainer")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CollapsibleContainer"]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 12.0
+offset_right = 494.0
+offset_bottom = 522.0
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CollapsibleContainer/ScrollContainer"]
+custom_minimum_size = Vector2(0, 600)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+script = ExtResource("4_co4fe")
+
+[node name="LogComponent" parent="CollapsibleContainer/ScrollContainer/VBoxContainer" instance=ExtResource("4_eh6e2")]
+layout_mode = 2
+
+[connection signal="toggled" from="CheckButton" to="CheckButton" method="_on_toggled"]

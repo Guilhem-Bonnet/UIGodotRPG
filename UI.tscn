@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://bfjf2yjoxk0od"]
+
+[node name="Ui" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Control" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 458.0
+offset_bottom = 303.0
+
+[node name="Panel" type="Panel" parent="Control"]
+layout_mode = 0
+offset_left = -458.0
+offset_top = -263.0
+offset_right = -194.0
+offset_bottom = -164.0

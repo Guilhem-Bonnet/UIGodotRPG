@@ -1,0 +1,41 @@
+[gd_scene load_steps=3 format=3 uid="uid://c1ll1g47iwu8w"]
+
+[ext_resource type="Texture2D" uid="uid://cq6iyshlvdr6i" path="res://Arene/DALL·E 2024-10-26 18.38.13 - A highly detailed dark fantasy arena, designed for a game interface background. The arena is vast, surrounded by towering stone walls adorned with got.webp" id="1_loa6f"]
+[ext_resource type="PackedScene" uid="uid://cxi1rod0fwbkg" path="res://Components/Personnage.tscn" id="2_raj8d"]
+
+[node name="Arene" type="Control"]
+clip_contents = true
+custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(1920, 1080)
+offset_right = 1920.0
+offset_bottom = 1080.0
+color = Color(0.0431373, 0.0431373, 0.0431373, 1)
+
+[node name="Dall·e2024-10-2618_38_13-AHighlyDetailedDarkFantasyArena,DesignedForAGameInterfaceBackground_TheArenaIsVast,SurroundedByToweringStoneWallsAdornedWithGot" type="Sprite2D" parent="ColorRect"]
+position = Vector2(966, 543)
+texture = ExtResource("1_loa6f")
+
+[node name="GridContainer" type="GridContainer" parent="."]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 17.0
+offset_right = 1919.0
+offset_bottom = 1091.0
+
+[node name="Personnage" parent="GridContainer" instance=ExtResource("2_raj8d")]
+layout_mode = 2
+
+[node name="Personnage2" parent="GridContainer" instance=ExtResource("2_raj8d")]
+visible = false
+layout_mode = 2
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(970, 552)
