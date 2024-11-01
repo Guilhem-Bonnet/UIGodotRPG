@@ -454,6 +454,7 @@ func _ready() -> void:
 	
 	# Must use call_deferred or sizing_node is seen as null when it isn't.
 	start_open_or_closed.call_deferred()
+	
 
 # Calls [method _increment_tween] when tweening if 
 # [member tween_in_physics_process] is false.

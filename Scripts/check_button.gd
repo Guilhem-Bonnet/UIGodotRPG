@@ -5,6 +5,7 @@ extends CheckButton
 
 func _ready() -> void:
 	collapsible_container = $"../CollapsibleContainer"
+	collapsible_container.close()
 	
 func _on_toggled(toggled_on: bool) -> void:
 	if toggled_on:

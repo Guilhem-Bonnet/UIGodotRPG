@@ -1,15 +1,24 @@
-[gd_scene load_steps=14 format=3 uid="uid://cxi1rod0fwbkg"]
+[gd_scene load_steps=17 format=3 uid="uid://cxi1rod0fwbkg"]
 
 [ext_resource type="Script" path="res://addons/collapsible_container/collapsible_elements/collapsible_container.gd" id="1_mwjg6"]
 [ext_resource type="Script" path="res://Scripts/Life.cs" id="1_rwq7v"]
-[ext_resource type="Script" path="res://Components/PersonnageUIManager.cs" id="1_xmf7w"]
+[ext_resource type="Script" path="res://Scripts/PersonnageUIManager.cs" id="1_xmf7w"]
 [ext_resource type="Script" path="res://Scripts/check_button.gd" id="2_52bfe"]
-[ext_resource type="Texture2D" uid="uid://dp65inx4ekus6" path="res://icons/DALL·E 2024-10-26 10.29.24 - A detailed dark fantasy vampire icon. At the center, a sinister vampire with glowing red eyes and sharp fangs emerges from the shadows, wearing a flow.webp" id="2_qtpb0"]
+[ext_resource type="Texture2D" uid="uid://x0rnnbdbup3q" path="res://icons/rework/240x240/Berserkx240.png" id="2_ux8tx"]
 [ext_resource type="Script" path="res://Scripts/LogContainer.cs" id="4_co4fe"]
-[ext_resource type="PackedScene" uid="uid://c8qx2amveoynf" path="res://Components/LogComponent.tscn" id="4_eh6e2"]
 [ext_resource type="Texture2D" uid="uid://bntcsgwf3jqco" path="res://icons/DALL·E 2024-10-26 13.20.08 - An icon representing an attack in a detailed dark fantasy style. At the center, a sharp, glowing sword or blade is mid-swing, surrounded by dynamic mo.webp" id="4_vspjt"]
 [ext_resource type="Texture2D" uid="uid://clnu8rl60lopd" path="res://icons/DALL·E 2024-10-26 13.20.30 - An icon representing defense in a detailed dark fantasy style. At the center, a large, weathered shield with intricate engravings and glowing runes is.webp" id="5_deo5a"]
-[ext_resource type="Texture2D" uid="uid://deh4l4rutm5m2" path="res://icons/rework/Eaten.webp" id="6_a08xr"]
+[ext_resource type="Texture2D" uid="uid://c6dmqvh34cxku" path="res://icons/rework/120x120/Eatenx120.png" id="6_t2f0o"]
+[ext_resource type="PackedScene" uid="uid://c8qx2amveoynf" path="res://Components/LogComponent.tscn" id="10_81jxk"]
+[ext_resource type="PackedScene" uid="uid://bw1q21bhn6gqm" path="res://Components/Spell.tscn" id="11_ih2gj"]
+[ext_resource type="Script" path="res://Scripts/SpellBar.cs" id="11_xce0r"]
+
+[sub_resource type="SystemFont" id="SystemFont_tsygf"]
+subpixel_positioning = 0
+
+[sub_resource type="LabelSettings" id="LabelSettings_gtsma"]
+font = SubResource("SystemFont_tsygf")
+font_size = 12
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_040yr"]
 bg_color = Color(0.327299, 0.327299, 0.327299, 1)
@@ -17,74 +26,81 @@ bg_color = Color(0.327299, 0.327299, 0.327299, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i16gm"]
 bg_color = Color(0, 0.726049, 0.178815, 1)
 
-[sub_resource type="ImageTexture" id="ImageTexture_ot555"]
-
 [node name="Personnage" type="Control"]
 layout_mode = 3
-anchor_right = 0.873
-anchor_bottom = 1.671
-offset_right = 0.303955
-offset_bottom = 0.191895
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 0
 script = ExtResource("1_xmf7w")
 
 [node name="TextEdit" type="TextEdit" parent="."]
 layout_mode = 0
-offset_left = 162.0
-offset_top = 83.8906
-offset_right = 335.0
-offset_bottom = 121.891
+offset_left = 109.0
+offset_top = 4.0
+offset_right = 266.0
+offset_bottom = 39.0
+scale = Vector2(0.565, 0.565)
 text = "Name personnage"
+placeholder_text = "Name personnage"
+
+[node name="Sprite2DClasse" type="Sprite2D" parent="."]
+texture_filter = 4
+position = Vector2(52.5, 54.5)
+scale = Vector2(0.445833, 0.445833)
+texture = ExtResource("2_ux8tx")
 
 [node name="Label_ClasseName" type="Label" parent="."]
 layout_mode = 0
-offset_top = 255.0
-offset_right = 203.0
-offset_bottom = 299.0
+offset_left = 17.0
+offset_top = 1.00001
+offset_right = 133.0
+offset_bottom = 22.0
+scale = Vector2(0.65, 0.65)
 text = "Classe personnage"
-
-[node name="Sprite2DClasse" type="Sprite2D" parent="Label_ClasseName"]
-position = Vector2(79.5625, -96.5625)
-scale = Vector2(0.149536, 0.149536)
-texture = ExtResource("2_qtpb0")
+label_settings = SubResource("LabelSettings_gtsma")
+autowrap_mode = 2
 
 [node name="Label_Focus" type="Label" parent="."]
 layout_mode = 0
-offset_left = 724.0
-offset_top = 235.891
-offset_right = 773.0
-offset_bottom = 261.891
+offset_left = 348.796
+offset_top = 74.0
+offset_right = 397.796
+offset_bottom = 100.0
+scale = Vector2(0.705, 0.705)
 text = "Cible :"
 
 [node name="Label_NameFocus" type="Label" parent="Label_Focus"]
 layout_mode = 0
 offset_left = 58.0
+offset_top = 5.67377
 offset_right = 153.0
-offset_bottom = 26.0
+offset_bottom = 31.6738
+scale = Vector2(0.705, 0.705)
 text = "Name Focus"
 
 [node name="Label_Defense" type="Label" parent="."]
 layout_mode = 0
-offset_left = 726.884
-offset_top = 321.775
-offset_right = 855.884
-offset_bottom = 347.775
+offset_left = 345.796
+offset_top = 134.0
+offset_right = 474.796
+offset_bottom = 160.0
+scale = Vector2(0.705, 0.705)
 text = "Défense contre :"
 
 [node name="Label_NameAttaquant" type="Label" parent="Label_Defense"]
 layout_mode = 0
 offset_left = 134.0
-offset_right = 229.0
-offset_bottom = 26.0
+offset_top = 4.25533
+offset_right = 263.0
+offset_bottom = 30.2553
+scale = Vector2(0.705, 0.705)
 text = "Name Attaquant"
 
 [node name="HealthBar" type="ProgressBar" parent="."]
 layout_mode = 0
-offset_left = 164.0
-offset_top = 131.891
-offset_right = 633.0
-offset_bottom = 158.891
+offset_left = 111.0
+offset_top = 27.0
+offset_right = 415.0
+offset_bottom = 50.0
+scale = Vector2(0.48, 0.48)
 theme_override_styles/background = SubResource("StyleBoxFlat_040yr")
 theme_override_styles/fill = SubResource("StyleBoxFlat_i16gm")
 value = 10.0
@@ -92,42 +108,30 @@ script = ExtResource("1_rwq7v")
 
 [node name="Bonus" type="ItemList" parent="."]
 layout_mode = 0
-offset_left = 194.0
-offset_top = 167.891
-offset_right = 635.0
-offset_bottom = 214.891
+offset_left = 111.0
+offset_top = 43.0
+offset_right = 380.0
+offset_bottom = 76.0
+scale = Vector2(0.545, 0.545)
 max_columns = 20
 
 [node name="Malus" type="ItemList" parent="."]
 layout_mode = 0
-offset_left = 194.0
-offset_top = 219.891
-offset_right = 635.0
-offset_bottom = 267.891
+offset_left = 112.0
+offset_top = 64.0
+offset_right = 380.0
+offset_bottom = 100.0
+scale = Vector2(0.545, 0.545)
 max_columns = 20
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 0
-offset_left = 164.0
-offset_top = 298.891
-offset_right = 278.0
-offset_bottom = 331.891
+offset_left = 110.0
+offset_top = 87.0
+offset_right = 165.0
+offset_bottom = 112.0
+scale = Vector2(0.57, 0.57)
 text = "Spells"
-
-[node name="ItemList" type="ItemList" parent="Label"]
-layout_mode = 0
-offset_left = -1.0
-offset_top = 31.0
-offset_right = 470.0
-offset_bottom = 107.0
-item_count = 3
-max_columns = 10
-same_column_width = true
-fixed_column_width = 40
-item_0/text = "test"
-item_0/icon = SubResource("ImageTexture_ot555")
-item_1/text = "test"
-item_2/text = "test"
 
 [node name="ColorRect" type="ColorRect" parent="."]
 visible = false
@@ -138,28 +142,35 @@ offset_bottom = 347.0
 color = Color(0, 0, 0, 0.588235)
 
 [node name="Sprite2D_Sword" type="Sprite2D" parent="."]
-position = Vector2(683, 270.891)
-scale = Vector2(0.0706026, 0.0706026)
+texture_filter = 1
+texture_repeat = 1
+position = Vector2(317.898, 99.898)
+scale = Vector2(0.0466763, 0.0466763)
 texture = ExtResource("4_vspjt")
 
 [node name="Sprite2D_Shield" type="Sprite2D" parent="."]
-position = Vector2(683, 352.775)
-scale = Vector2(0.071, 0.071)
+texture_filter = 1
+position = Vector2(317.796, 158)
+scale = Vector2(0.0458985, 0.0458985)
 texture = ExtResource("5_deo5a")
 
 [node name="Sprite2D_DeathState" type="Sprite2D" parent="."]
-position = Vector2(713, 155.891)
-scale = Vector2(0.128693, 0.128693)
-texture = ExtResource("6_a08xr")
+texture_filter = 4
+position = Vector2(293, 33)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("6_t2f0o")
 
 [node name="CheckButton" type="CheckButton" parent="."]
 layout_mode = 0
-offset_left = 150.0
-offset_top = 433.891
-offset_right = 320.0
-offset_bottom = 464.891
+offset_top = 173.0
+offset_right = 170.0
+offset_bottom = 204.0
+scale = Vector2(0.605, 0.605)
 text = "Afficher les logs"
 script = ExtResource("2_52bfe")
+
+[node name="Dominicanjoker-comic-publisher-folder-icon_64" type="Sprite2D" parent="."]
+position = Vector2(417, 126)
 
 [node name="CollapsibleContainer" type="Control" parent="."]
 process_mode = 3
@@ -170,13 +181,15 @@ Give feedback at: https://github.com/ArshvirGoraya/Godot-Collapsible-Container"
 clip_contents = true
 custom_minimum_size = Vector2(493, 510)
 anchors_preset = 0
-offset_left = 155.0
-offset_top = 479.891
-offset_right = 648.0
-offset_bottom = 989.891
+offset_left = 5.0
+offset_top = 193.0
+offset_right = 498.0
+offset_bottom = 703.0
+scale = Vector2(0.585, 0.585)
 size_flags_horizontal = 3
 size_flags_vertical = 0
 script = ExtResource("1_mwjg6")
+starts_opened = false
 folding_direction_preset = 14
 sizing_constraint = 1
 auto_update_size = 0
@@ -198,7 +211,42 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 10
 script = ExtResource("4_co4fe")
 
-[node name="LogComponent" parent="CollapsibleContainer/ScrollContainer/VBoxContainer" instance=ExtResource("4_eh6e2")]
+[node name="LogComponent" parent="CollapsibleContainer/ScrollContainer/VBoxContainer" instance=ExtResource("10_81jxk")]
+layout_mode = 2
+
+[node name="LogComponent2" parent="CollapsibleContainer/ScrollContainer/VBoxContainer" instance=ExtResource("10_81jxk")]
+layout_mode = 2
+
+[node name="LogComponent3" parent="CollapsibleContainer/ScrollContainer/VBoxContainer" instance=ExtResource("10_81jxk")]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 2
+offset_left = 56.0
+offset_top = 110.0
+offset_right = 260.0
+offset_bottom = 158.0
+
+[node name="ColorRect" type="ColorRect" parent="PanelContainer"]
+visible = false
+layout_mode = 2
+color = Color(0.0295066, 0.0295066, 0.0295066, 1)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 2
+script = ExtResource("11_xce0r")
+
+[node name="Spell" parent="PanelContainer/HBoxContainer" instance=ExtResource("11_ih2gj")]
+layout_mode = 2
+
+[node name="Spell2" parent="PanelContainer/HBoxContainer" instance=ExtResource("11_ih2gj")]
+layout_mode = 2
+
+[node name="Spell3" parent="PanelContainer/HBoxContainer" instance=ExtResource("11_ih2gj")]
+layout_mode = 2
+
+[node name="Spell4" parent="PanelContainer/HBoxContainer" instance=ExtResource("11_ih2gj")]
 layout_mode = 2
 
 [connection signal="toggled" from="CheckButton" to="CheckButton" method="_on_toggled"]

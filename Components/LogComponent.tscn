@@ -1,17 +1,18 @@
-[gd_scene load_steps=2 format=3 uid="uid://c8qx2amveoynf"]
+[gd_scene format=3 uid="uid://c8qx2amveoynf"]
 
-[ext_resource type="Script" path="res://Scripts/LogPanel.cs" id="1_1y3vc"]
+[node name="LogComponent" type="PanelContainer"]
+self_modulate = Color(0, 0, 0, 1)
+offset_right = 336.0
+offset_bottom = 49.0
+size_flags_horizontal = 3
 
-[node name="LogComponent" type="Panel"]
-script = ExtResource("1_1y3vc")
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 2
+color = Color(0.111197, 0.111197, 0.111197, 1)
 
 [node name="Label" type="Label" parent="."]
-layout_mode = 0
-offset_left = 5.0
-offset_top = 10.0
-offset_right = 477.0
-offset_bottom = 579.0
-text = "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
-horizontal_alignment = 3
-vertical_alignment = 3
+custom_minimum_size = Vector2(60, 20)
+layout_mode = 2
+text = "[02:46:45] Alchimiste Paul perd 3pv
+Alchimiste Paul new Life: 67"
 autowrap_mode = 1

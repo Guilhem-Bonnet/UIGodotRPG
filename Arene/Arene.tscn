@@ -15,6 +15,7 @@ grow_vertical = 2
 
 [node name="ColorRect" type="ColorRect" parent="."]
 custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 0
 offset_right = 1920.0
 offset_bottom = 1080.0
 color = Color(0.0431373, 0.0431373, 0.0431373, 1)
@@ -25,10 +26,10 @@ texture = ExtResource("1_loa6f")
 
 [node name="GridContainer" type="GridContainer" parent="."]
 layout_mode = 0
-offset_left = 1.0
-offset_top = 17.0
-offset_right = 1919.0
-offset_bottom = 1091.0
+offset_left = -5.0
+offset_top = 14.0
+offset_right = 1913.0
+offset_bottom = 1088.0
 
 [node name="Personnage" parent="GridContainer" instance=ExtResource("2_raj8d")]
 layout_mode = 2
@@ -38,4 +39,4 @@ visible = false
 layout_mode = 2
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(970, 552)
+position = Vector2(960, 541)
