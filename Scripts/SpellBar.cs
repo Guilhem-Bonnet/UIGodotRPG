@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public partial class SpellBar : HBoxContainer
 {
     // Chemin de la scène SpellButton
-    private PackedScene spellButtonScene = GD.Load<PackedScene>("res://SpellButton.tscn");
+    private PackedScene spellButtonScene = GD.Load<PackedScene>("res://Components/SpellButton.tscn");
 
     public void AddSpell(Texture2D icon, float cooldown)
     {

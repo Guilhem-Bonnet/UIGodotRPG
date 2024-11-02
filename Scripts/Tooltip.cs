@@ -1,6 +1,6 @@
 using Godot;
 
-public partial class Tooltip : Panel
+public partial class Tooltip : PanelContainer
 {
     private Label tooltipLabel;
 

@@ -19,11 +19,11 @@ public partial class SpellButton : TextureButton
         cooldownBar.Visible = false; // Cachée lorsqu'il n'est pas en cooldown
 
         // Charge la scène de l'info-bulle (assurez-vous de bien configurer le chemin)
-        var tooltipScene = GD.Load<PackedScene>("res://Tooltip.tscn");
+        var tooltipScene = GD.Load<PackedScene>("res://Components/Tooltip.tscn");
         tooltip = (Tooltip)tooltipScene.Instantiate();
 
         // Ajoutez l'info-bulle à la scène
-        GetTree().Root.AddChild(tooltip);
+        this.CallDeferred("add_child", tooltip);
 
         // Connectez les signaux de survol de la souris
         Connect("mouse_entered", Callable.From(OnMouseEntered));
