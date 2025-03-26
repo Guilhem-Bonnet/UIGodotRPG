@@ -1,17 +1,17 @@
 [gd_scene load_steps=15 format=3 uid="uid://cxi1rod0fwbkg"]
 
-[ext_resource type="Script" path="res://addons/collapsible_container/collapsible_elements/collapsible_container.gd" id="1_mwjg6"]
-[ext_resource type="Script" path="res://Scripts/Life.cs" id="1_rwq7v"]
-[ext_resource type="Script" path="res://Scripts/PersonnageUIManager.cs" id="1_xmf7w"]
-[ext_resource type="Script" path="res://Scripts/check_button.gd" id="2_52bfe"]
+[ext_resource type="Script" uid="uid://ytawsers1yls" path="res://addons/collapsible_container/collapsible_elements/collapsible_container.gd" id="1_mwjg6"]
+[ext_resource type="Script" uid="uid://cirqoeiqtkvh7" path="res://Scripts/Life.cs" id="1_rwq7v"]
+[ext_resource type="Script" uid="uid://cqw13n7l7y5b8" path="res://Scripts/PersonnageUIManager.cs" id="1_xmf7w"]
+[ext_resource type="Script" uid="uid://clx7towtjkp6d" path="res://Scripts/check_button.gd" id="2_52bfe"]
 [ext_resource type="Texture2D" uid="uid://088iln1rlycr" path="res://icons/rework/64x64/Berserkx64.png" id="3_xnybx"]
-[ext_resource type="Script" path="res://Scripts/LogContainer.cs" id="4_co4fe"]
+[ext_resource type="Script" uid="uid://dfv0vxqts4hd1" path="res://Scripts/LogContainer.cs" id="4_co4fe"]
 [ext_resource type="Texture2D" uid="uid://bntcsgwf3jqco" path="res://icons/DALL·E 2024-10-26 13.20.08 - An icon representing an attack in a detailed dark fantasy style. At the center, a sharp, glowing sword or blade is mid-swing, surrounded by dynamic mo.webp" id="4_vspjt"]
 [ext_resource type="Texture2D" uid="uid://clnu8rl60lopd" path="res://icons/DALL·E 2024-10-26 13.20.30 - An icon representing defense in a detailed dark fantasy style. At the center, a large, weathered shield with intricate engravings and glowing runes is.webp" id="5_deo5a"]
 [ext_resource type="Texture2D" uid="uid://c6dmqvh34cxku" path="res://icons/rework/120x120/Eatenx120.png" id="6_t2f0o"]
 [ext_resource type="PackedScene" uid="uid://c8qx2amveoynf" path="res://Components/LogComponent.tscn" id="10_81jxk"]
 [ext_resource type="PackedScene" uid="uid://bw1q21bhn6gqm" path="res://Components/SpellButton.tscn" id="11_ih2gj"]
-[ext_resource type="Script" path="res://Scripts/SpellBar.cs" id="11_xce0r"]
+[ext_resource type="Script" uid="uid://1rqmm0r7fnss" path="res://Scripts/SpellBar.cs" id="11_xce0r"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_040yr"]
 bg_color = Color(0.327299, 0.327299, 0.327299, 1)

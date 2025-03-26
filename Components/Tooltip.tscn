@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://l2er35wsio7"]
 
-[ext_resource type="Script" path="res://Scripts/Tooltip.cs" id="1_savj1"]
+[ext_resource type="Script" uid="uid://44bfom8vktmw" path="res://Scripts/Tooltip.cs" id="1_savj1"]
 
 [node name="Tooltip" type="PanelContainer"]
 visibility_layer = 2

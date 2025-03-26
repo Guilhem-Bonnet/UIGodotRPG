@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://c1ll1g47iwu8w"]
 
-[ext_resource type="Texture2D" uid="uid://cq6iyshlvdr6i" path="res://Arene/DALL·E 2024-10-26 18.38.13 - A highly detailed dark fantasy arena, designed for a game interface background. The arena is vast, surrounded by towering stone walls adorned with got.webp" id="1_loa6f"]
-[ext_resource type="Script" path="res://Scripts/ProfileGrid.cs" id="2_ptcjd"]
+[ext_resource type="Texture2D" uid="uid://5ohwl5rcs3yw" path="res://Arene/fondArene.jpg" id="1_t7c3k"]
+[ext_resource type="Script" uid="uid://06odev7clau4" path="res://Scripts/ProfileGrid.cs" id="2_ptcjd"]
 [ext_resource type="PackedScene" uid="uid://cxi1rod0fwbkg" path="res://Components/Personnage.tscn" id="2_raj8d"]
 
 [node name="Arene" type="Control"]
@@ -23,12 +23,12 @@ color = Color(0.0431373, 0.0431373, 0.0431373, 1)
 
 [node name="Dall·e2024-10-2618_38_13-AHighlyDetailedDarkFantasyArena,DesignedForAGameInterfaceBackground_TheArenaIsVast,SurroundedByToweringStoneWallsAdornedWithGot" type="Sprite2D" parent="ColorRect"]
 position = Vector2(966, 543)
-texture = ExtResource("1_loa6f")
+texture = ExtResource("1_t7c3k")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 0
 offset_left = 23.0
-offset_right = 1873.0
+offset_right = 1916.0
 offset_bottom = 1075.0
 horizontal_scroll_mode = 2
 vertical_scroll_mode = 2

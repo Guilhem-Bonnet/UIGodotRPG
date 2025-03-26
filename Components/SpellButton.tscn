@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bw1q21bhn6gqm"]
 
 [ext_resource type="Texture2D" uid="uid://bm8wwigfhqpm7" path="res://icons/rework/48x48/Berserkx48.png" id="1_fkcv8"]
-[ext_resource type="Script" path="res://Scripts/SpellButton.cs" id="2_6bjqj"]
+[ext_resource type="Script" uid="uid://dn7m4pqktfjg3" path="res://Scripts/SpellButton.cs" id="2_6bjqj"]
 
 [node name="SpellButton" type="TextureButton"]
 offset_bottom = 48.0
