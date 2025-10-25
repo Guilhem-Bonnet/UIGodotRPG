@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="Front-BR-RPG"
-run/main_scene="res://Components/Personnage.tscn"
+run/main_scene="res://Scenes/TestWebSocket.tscn"
 config/features=PackedStringArray("4.4", "C#", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[autoload]
+
+WebSocketClient="*res://Scripts/Network/WebSocketClient.cs"
 
 [display]
 
