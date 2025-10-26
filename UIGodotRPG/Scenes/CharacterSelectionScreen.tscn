@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://by1p3k1j7okqs"]
+[gd_scene load_steps=2 format=3 uid="uid://c4r4pwh1jtfab"]
 
-[ext_resource type="Script" path="res://Scripts/UI/CharacterSelectionUI.cs" id="1_character_selection"]
+[ext_resource type="Script" uid="uid://qq44usbx2oam" path="res://Scripts/UI/CharacterSelectionUI.cs" id="1_character_selection"]
 
 [node name="CharacterSelectionScreen" type="Control"]
 layout_mode = 3

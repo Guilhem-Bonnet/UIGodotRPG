@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://dp7mjr1v6yxaw"]
+[gd_scene load_steps=2 format=3 uid="uid://cwvr7c1xd0740"]
 
-[ext_resource type="Script" path="res://Scripts/UI/BattleViewer.cs" id="1_battle_viewer"]
+[ext_resource type="Script" uid="uid://dveim57bb8abf" path="res://Scripts/UI/BattleViewer.cs" id="1_battle_viewer"]
 
 [node name="BattleViewer" type="Control"]
 layout_mode = 3
@@ -50,18 +50,6 @@ theme_override_constants/separation = 10
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HeaderLabel" type="Label" parent="MarginContainer/HSplitContainer/RightPanel/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "📜 Journal de Combat"
-horizontal_alignment = 1
-
-[node name="BattleStatusLabel" type="Label" parent="MarginContainer/HSplitContainer/RightPanel/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 18
-text = "En attente..."
-horizontal_alignment = 1
-
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HSplitContainer/RightPanel"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -78,3 +66,15 @@ bbcode_enabled = true
 text = "[color=#00FF00]En attente du début du combat...[/color]"
 fit_content = true
 scroll_following = true
+
+[node name="MarginContainer_HSplitContainer_RightPanel_VBoxContainer#HeaderLabel" type="Label" parent="."]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "📜 Journal de Combat"
+horizontal_alignment = 1
+
+[node name="MarginContainer_HSplitContainer_RightPanel_VBoxContainer#BattleStatusLabel" type="Label" parent="."]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "En attente..."
+horizontal_alignment = 1
