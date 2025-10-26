@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://bfjf2yjoxk0od"]
+[gd_scene load_steps=2 format=3 uid="uid://dviw0qs0wx12r"]
 
 [ext_resource type="Script" path="res://Scripts/UI/MainUI.cs" id="1_main_ui"]
 
@@ -18,10 +18,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
@@ -29,40 +29,210 @@ theme_override_constants/separation = 10
 
 [node name="Title" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "RPG Arena - Client WebSocket"
+theme_override_font_sizes/font_size = 32
+text = "⚔️ RPG Arena - Interface de Combat ⚔️"
 horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 0
 
 [node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
+
+[node name="TopContainer" type="HSplitContainer" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+
+[node name="ConnectionPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/TopContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ConnectionVBox" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TopContainer/ConnectionPanel"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ConnectionTitle" type="Label" parent="MarginContainer/VBoxContainer/TopContainer/ConnectionPanel/ConnectionVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "🔌 Connexion WebSocket"
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/TopContainer/ConnectionPanel/ConnectionVBox"]
+layout_mode = 2
+
+[node name="StatusLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/TopContainer/ConnectionPanel/ConnectionVBox"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+bbcode_enabled = true
+text = "[color=gray]⚫ Déconnecté[/color]"
+fit_content = true
+
+[node name="ServerLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/TopContainer/ConnectionPanel/ConnectionVBox"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+bbcode_enabled = true
+text = "[color=gray]🌐 Serveur: ws://localhost:5018/ws[/color]"
+fit_content = true
+
+[node name="UptimeLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/TopContainer/ConnectionPanel/ConnectionVBox"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+bbcode_enabled = true
+text = "[color=gray]⏱️ Temps de connexion: --[/color]"
+fit_content = true
+
+[node name="LatencyLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/TopContainer/ConnectionPanel/ConnectionVBox"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+bbcode_enabled = true
+text = "[color=gray]📡 Latence: -- ms[/color]"
+fit_content = true
+
+[node name="MessagesLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/TopContainer/ConnectionPanel/ConnectionVBox"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+bbcode_enabled = true
+text = "[color=gray]📨 Messages reçus: 0[/color]"
+fit_content = true
+
+[node name="StatsPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/TopContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="StatsVBox" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TopContainer/StatsPanel"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="StatsTitle" type="Label" parent="MarginContainer/VBoxContainer/TopContainer/StatsPanel/StatsVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "📊 Statistiques de Combat"
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/TopContainer/StatsPanel/StatsVBox"]
+layout_mode = 2
+
+[node name="BattleStatusLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/TopContainer/StatsPanel/StatsVBox"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+bbcode_enabled = true
+text = "[color=gray]⚔️ État: En attente[/color]"
+fit_content = true
+
+[node name="CharactersLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/TopContainer/StatsPanel/StatsVBox"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+bbcode_enabled = true
+text = "[color=gray]👥 Personnages: --[/color]"
+fit_content = true
+
+[node name="AliveLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/TopContainer/StatsPanel/StatsVBox"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+bbcode_enabled = true
+text = "[color=gray]✅ Vivants: --[/color]"
+fit_content = true
+
+[node name="DeadLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/TopContainer/StatsPanel/StatsVBox"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+bbcode_enabled = true
+text = "[color=gray]💀 Morts: --[/color]"
+fit_content = true
+
+[node name="ActionsLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/TopContainer/StatsPanel/StatsVBox"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+bbcode_enabled = true
+text = "[color=gray]💥 Actions totales: 0[/color]"
+fit_content = true
 
 [node name="ButtonsContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 10
 
 [node name="ConnectButton" type="Button" parent="MarginContainer/VBoxContainer/ButtonsContainer"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Se connecter"
+theme_override_font_sizes/font_size = 18
+text = "🔌 Se connecter"
 
-[node name="StartButton" type="Button" parent="MarginContainer/VBoxContainer/ButtonsContainer"]
+[node name="DisconnectButton" type="Button" parent="MarginContainer/VBoxContainer/ButtonsContainer"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Démarrer Combat"
+theme_override_font_sizes/font_size = 18
+text = "🔌 Déconnecter"
 disabled = true
 
-[node name="LogScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
+[node name="StartButton" type="Button" parent="MarginContainer/VBoxContainer/ButtonsContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+text = "⚔️ Démarrer Combat"
+disabled = true
+
+[node name="ClearButton" type="Button" parent="MarginContainer/VBoxContainer/ButtonsContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+text = "🗑️ Effacer Logs"
+
+[node name="BottomSplit" type="HSplitContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-follow_focus = true
 
-[node name="LogLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/LogScrollContainer"]
+[node name="CharactersPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/BottomSplit"]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+
+[node name="CharactersVBox" type="VBoxContainer" parent="MarginContainer/VBoxContainer/BottomSplit/CharactersPanel"]
+layout_mode = 2
+
+[node name="CharactersTitle" type="Label" parent="MarginContainer/VBoxContainer/BottomSplit/CharactersPanel/CharactersVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "👥 Personnages en Combat"
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/BottomSplit/CharactersPanel/CharactersVBox"]
+layout_mode = 2
+
+[node name="CharactersScroll" type="ScrollContainer" parent="MarginContainer/VBoxContainer/BottomSplit/CharactersPanel/CharactersVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CharactersList" type="RichTextLabel" parent="MarginContainer/VBoxContainer/BottomSplit/CharactersPanel/CharactersVBox/CharactersScroll"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 bbcode_enabled = true
-text = "[color=gray]📜 Logs du serveur apparaîtront ici...[/color]
+text = "[color=gray]Aucun personnage en combat[/color]"
+fit_content = true
+
+[node name="LogPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/BottomSplit"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LogVBox" type="VBoxContainer" parent="MarginContainer/VBoxContainer/BottomSplit/LogPanel"]
+layout_mode = 2
+
+[node name="LogTitle" type="Label" parent="MarginContainer/VBoxContainer/BottomSplit/LogPanel/LogVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "📜 Journal de Combat"
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/BottomSplit/LogPanel/LogVBox"]
+layout_mode = 2
+
+[node name="LogScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer/BottomSplit/LogPanel/LogVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+follow_focus = true
+
+[node name="LogLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/BottomSplit/LogPanel/LogVBox/LogScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[color=gray]📜 Les logs du serveur apparaîtront ici...[/color]
 "
 fit_content = true
 scroll_following = true
