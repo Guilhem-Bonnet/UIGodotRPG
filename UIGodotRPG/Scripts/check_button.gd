@@ -4,7 +4,7 @@ extends CheckButton
 @export var check_button: CheckButton
 
 func _ready() -> void:
-	collapsible_container = $"../CollapsibleContainer"
+	collapsible_container = $"../Logs-CollapsibleContainer"
 	collapsible_container.close()
 	
 func _on_toggled(toggled_on: bool) -> void:

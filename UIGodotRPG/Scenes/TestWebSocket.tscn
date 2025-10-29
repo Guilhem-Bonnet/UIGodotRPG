@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://dviw0qs0wx12r"]
+[gd_scene load_steps=2 format=3 uid="uid://bq3r7620uwpkm"]
 
-[ext_resource type="Script" path="res://Scripts/UI/MainUI.cs" id="1_main_ui"]
+[ext_resource type="Script" uid="uid://fc41w6pjsdka" path="res://Scripts/UI/MainUI.cs" id="1_main_ui"]
 
 [node name="MainUI" type="Control"]
 layout_mode = 3
@@ -158,16 +158,16 @@ custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 18
-text = "🔌 Déconnecter"
 disabled = true
+text = "🔌 Déconnecter"
 
 [node name="StartButton" type="Button" parent="MarginContainer/VBoxContainer/ButtonsContainer"]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 18
-text = "⚔️ Démarrer Combat"
 disabled = true
+text = "⚔️ Démarrer Combat"
 
 [node name="ClearButton" type="Button" parent="MarginContainer/VBoxContainer/ButtonsContainer"]
 custom_minimum_size = Vector2(0, 50)

@@ -12,7 +12,7 @@ namespace FrontBRRPG.Network
 	public partial class WebSocketClient : Node
 	{
 		private WebSocketPeer _wsPeer;
-		private string _serverUrl = "ws://localhost:5018/ws";
+		private string _serverUrl = "ws://localhost:5000/ws";
 		private bool _isConnected = false;
 		private bool _hasLoggedConnection = false;
 		private double _reconnectTimer = 0;
@@ -207,6 +207,37 @@ namespace FrontBRRPG.Network
 		{
 			Disconnect();
 			base._ExitTree();
+		}
+		
+		/// <summary>
+		/// Récupère la liste des classes de personnages disponibles depuis le backend
+		/// </summary>
+		public async System.Threading.Tasks.Task<List<string>> GetAvailableClassesAsync()
+		{
+			var httpClient = new System.Net.Http.HttpClient();
+			try
+			{
+				var baseUrl = _serverUrl.Replace("ws://", "http://").Replace("/ws", "");
+				var response = await httpClient.GetStringAsync($"{baseUrl}/api/personnages/classes");
+				var classes = JsonSerializer.Deserialize<List<string>>(response);
+				GD.Print($"[WebSocket] Classes disponibles récupérées: {classes?.Count ?? 0}");
+				return classes ?? new List<string>();
+			}
+			catch (Exception ex)
+			{
+				GD.PrintErr($"[WebSocket] Erreur lors de la récupération des classes: {ex.Message}");
+				// Retourner les classes par défaut si le backend n'est pas disponible
+				return new List<string>
+				{
+					"Guerrier", "Berserker", "Magicien", "Assassin",
+					"Pretre", "Paladin", "Necromancien", "Alchimiste",
+					"Illusioniste", "Vampire", "Zombie", "Robot"
+				};
+			}
+			finally
+			{
+				httpClient.Dispose();
+			}
 		}
 	}
 }

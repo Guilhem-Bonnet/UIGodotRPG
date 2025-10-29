@@ -1,13 +1,10 @@
-[gd_scene load_steps=15 format=3 uid="uid://cxi1rod0fwbkg"]
+[gd_scene load_steps=12 format=3 uid="uid://cxi1rod0fwbkg"]
 
 [ext_resource type="Script" uid="uid://ytawsers1yls" path="res://addons/collapsible_container/collapsible_elements/collapsible_container.gd" id="1_mwjg6"]
 [ext_resource type="Script" uid="uid://cirqoeiqtkvh7" path="res://Scripts/Life.cs" id="1_rwq7v"]
 [ext_resource type="Script" uid="uid://cqw13n7l7y5b8" path="res://Scripts/PersonnageUIManager.cs" id="1_xmf7w"]
 [ext_resource type="Script" uid="uid://clx7towtjkp6d" path="res://Scripts/check_button.gd" id="2_52bfe"]
-[ext_resource type="Texture2D" uid="uid://088iln1rlycr" path="res://icons/rework/64x64/Berserkx64.png" id="3_xnybx"]
 [ext_resource type="Script" uid="uid://dfv0vxqts4hd1" path="res://Scripts/LogContainer.cs" id="4_co4fe"]
-[ext_resource type="Texture2D" uid="uid://bntcsgwf3jqco" path="res://icons/DALL·E 2024-10-26 13.20.08 - An icon representing an attack in a detailed dark fantasy style. At the center, a sharp, glowing sword or blade is mid-swing, surrounded by dynamic mo.webp" id="4_vspjt"]
-[ext_resource type="Texture2D" uid="uid://clnu8rl60lopd" path="res://icons/DALL·E 2024-10-26 13.20.30 - An icon representing defense in a detailed dark fantasy style. At the center, a large, weathered shield with intricate engravings and glowing runes is.webp" id="5_deo5a"]
 [ext_resource type="Texture2D" uid="uid://c6dmqvh34cxku" path="res://icons/rework/120x120/Eatenx120.png" id="6_t2f0o"]
 [ext_resource type="PackedScene" uid="uid://c8qx2amveoynf" path="res://Components/LogComponent.tscn" id="10_81jxk"]
 [ext_resource type="PackedScene" uid="uid://bw1q21bhn6gqm" path="res://Components/SpellButton.tscn" id="11_ih2gj"]
@@ -45,21 +42,32 @@ placeholder_text = "Name personnage"
 
 [node name="Label_NameFocus" type="Label" parent="."]
 layout_mode = 0
-offset_left = 34.0
+offset_left = 8.0
 offset_top = 143.0
-offset_right = 129.0
-offset_bottom = 169.0
-scale = Vector2(0.705, 0.705)
-text = "Name Focus"
+offset_right = 202.0
+offset_bottom = 156.0
+theme_override_font_sizes/font_size = 10
+text = "🎯 Focus: "
 
 [node name="Label_NameAttaquant" type="Label" parent="."]
 layout_mode = 0
-offset_left = 35.0
-offset_top = 176.0
-offset_right = 164.0
-offset_bottom = 202.0
-scale = Vector2(0.705, 0.705)
-text = "Name Attaquant"
+offset_left = 8.0
+offset_top = 157.0
+offset_right = 202.0
+offset_bottom = 170.0
+theme_override_font_sizes/font_size = 10
+text = "⚔️ Attaqué par: "
+
+[node name="Label_Stats" type="Label" parent="."]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 174.0
+offset_right = 201.0
+offset_bottom = 196.0
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_font_sizes/font_size = 9
+text = "💀 0 | ⚔️ 0 | 🛡 0 | ❤️ 0"
+autowrap_mode = 3
 
 [node name="HealthBar" type="ProgressBar" parent="."]
 layout_mode = 0
@@ -73,11 +81,14 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_i16gm")
 value = 10.0
 script = ExtResource("1_rwq7v")
 
-[node name="Sprite2DClasse" type="Sprite2D" parent="."]
-texture_filter = 4
-position = Vector2(22.2667, 35.2667)
-scale = Vector2(0.445833, 0.445833)
-texture = ExtResource("3_xnybx")
+[node name="ClassEmojiLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 20.0
+offset_right = 38.0
+offset_bottom = 50.0
+theme_override_font_sizes/font_size = 24
+text = "⚔️"
 
 [node name="Bonus" type="ItemList" parent="."]
 layout_mode = 0
@@ -105,23 +116,10 @@ offset_right = 497.0
 offset_bottom = 347.0
 color = Color(0, 0, 0, 0.588235)
 
-[node name="Sprite2D_Sword" type="Sprite2D" parent="."]
-texture_filter = 1
-texture_repeat = 1
-position = Vector2(16.5, 160.5)
-scale = Vector2(0.0263672, 0.0263672)
-texture = ExtResource("4_vspjt")
-
-[node name="Sprite2D_Shield" type="Sprite2D" parent="."]
-texture_filter = 1
-position = Vector2(17, 191.648)
-scale = Vector2(0.0273437, 0.0273437)
-texture = ExtResource("5_deo5a")
-
 [node name="Sprite2D_DeathState" type="Sprite2D" parent="."]
 texture_filter = 4
 position = Vector2(136, 15)
-scale = Vector2(0.216667, 0.216667)
+scale = Vector2(0.15, 0.15)
 texture = ExtResource("6_t2f0o")
 
 [node name="CheckButton" type="CheckButton" parent="."]
@@ -137,7 +135,7 @@ script = ExtResource("2_52bfe")
 [node name="Dominicanjoker-comic-publisher-folder-icon_64" type="Sprite2D" parent="."]
 position = Vector2(417, 144)
 
-[node name="CollapsibleContainer" type="Control" parent="."]
+[node name="Logs-CollapsibleContainer" type="Control" parent="."]
 process_mode = 3
 editor_description = "
 			A custom/plugin Control node capable of hiding and revealing its children by folding and unfolding.
@@ -160,7 +158,7 @@ sizing_constraint = 1
 auto_update_size = 0
 sizing_node = NodePath("ScrollContainer")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="CollapsibleContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Logs-CollapsibleContainer"]
 layout_mode = 0
 offset_left = 1.0
 offset_top = 12.0
@@ -169,20 +167,20 @@ offset_bottom = 284.0
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CollapsibleContainer/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Logs-CollapsibleContainer/ScrollContainer"]
 custom_minimum_size = Vector2(0, 600)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 10
 script = ExtResource("4_co4fe")
 
-[node name="LogComponent" parent="CollapsibleContainer/ScrollContainer/VBoxContainer" instance=ExtResource("10_81jxk")]
+[node name="LogComponent" parent="Logs-CollapsibleContainer/ScrollContainer/VBoxContainer" instance=ExtResource("10_81jxk")]
 layout_mode = 2
 
-[node name="LogComponent2" parent="CollapsibleContainer/ScrollContainer/VBoxContainer" instance=ExtResource("10_81jxk")]
+[node name="LogComponent2" parent="Logs-CollapsibleContainer/ScrollContainer/VBoxContainer" instance=ExtResource("10_81jxk")]
 layout_mode = 2
 
-[node name="LogComponent3" parent="CollapsibleContainer/ScrollContainer/VBoxContainer" instance=ExtResource("10_81jxk")]
+[node name="LogComponent3" parent="Logs-CollapsibleContainer/ScrollContainer/VBoxContainer" instance=ExtResource("10_81jxk")]
 layout_mode = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="."]

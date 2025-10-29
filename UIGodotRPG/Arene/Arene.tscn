@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://c1ll1g47iwu8w"]
 
+[ext_resource type="Script" uid="uid://c3g2iihwtv5wo" path="res://Scripts/AreneController.cs" id="1_arene_controller"]
 [ext_resource type="Texture2D" uid="uid://5ohwl5rcs3yw" path="res://Arene/fondArene.jpg" id="1_t7c3k"]
-[ext_resource type="Script" path="res://Scripts/AreneController.cs" id="1_arene_controller"]
 [ext_resource type="Script" uid="uid://06odev7clau4" path="res://Scripts/ProfileGrid.cs" id="2_ptcjd"]
-[ext_resource type="PackedScene" uid="uid://cxi1rod0fwbkg" path="res://Components/Personnage.tscn" id="2_raj8d"]
+[ext_resource type="PackedScene" uid="uid://cxi1rod0fwbkg" path="res://Components/PersonnageCard.tscn" id="2_raj8d"]
 
 [node name="Arene" type="Control"]
 clip_contents = true

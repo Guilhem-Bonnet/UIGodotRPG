@@ -1,210 +1,303 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using FrontBRRPG.Models;
+using FrontBRRPG.Utils;
 
-/// <summary>
-/// Gestionnaire d'interface pour un personnage dans l'arène
-/// Synchronise l'affichage avec les événements de combat du serveur
-/// </summary>
-public partial class PersonnageUIManager : Control
+namespace FrontBRRPG
 {
-	// Propriétés du personnage
-	public string CharacterName { get; set; } = "";
-	public string CharacterType { get; set; } = "";
-	public int CurrentHP { get; set; } = 100;
-	public int MaxHP { get; set; } = 100;
-	public bool IsDead { get; set; } = false;
-	public string FocusTarget { get; set; } = "";
-	public string Attacker { get; set; } = "";
-	
-	// Références UI
-	private TextEdit _nameEdit;
-	private Life _healthBar;
-	private Label _nameFocusLabel;
-	private Label _nameAttaquantLabel;
-	private Sprite2D _classeSprite;
-	private Sprite2D _deathStateSprite;
-	private ItemList _bonusList;
-	private ItemList _malusList;
-	private LogContainer _logContainer;
-	private ColorRect _overlayDeath;
-	
-	public override void _Ready()
+	public partial class PersonnageUIManager : Control
 	{
-		// Récupérer les références UI
-		_nameEdit = GetNode<TextEdit>("TextEdit");
-		_healthBar = GetNode<Life>("HealthBar");
-		_nameFocusLabel = GetNode<Label>("Label_NameFocus");
-		_nameAttaquantLabel = GetNode<Label>("Label_NameAttaquant");
-		_classeSprite = GetNode<Sprite2D>("Sprite2DClasse");
-		_deathStateSprite = GetNode<Sprite2D>("Sprite2D_DeathState");
-		_bonusList = GetNode<ItemList>("Bonus");
-		_malusList = GetNode<ItemList>("Malus");
-		_logContainer = GetNode<LogContainer>("CollapsibleContainer/ScrollContainer/VBoxContainer");
-		_overlayDeath = GetNode<ColorRect>("ColorRect");
+		public CharacterData CharacterData { get; private set; }
 		
-		// Initialiser l'affichage
-		_deathStateSprite.Visible = false;
-		_overlayDeath.Visible = false;
-		_nameFocusLabel.Text = "";
-		_nameAttaquantLabel.Text = "";
-	}
-	
-	/// <summary>
-	/// Initialise le personnage avec ses données
-	/// </summary>
-	public void InitializeCharacter(string name, string type, int maxHp = 100)
-	{
-		CharacterName = name;
-		CharacterType = type;
-		MaxHP = maxHp;
-		CurrentHP = maxHp;
+		private List<CombatLogEntry> _logHistory = new();
 		
-		_nameEdit.Text = name;
-		_healthBar.MaxValue = maxHp;
-		_healthBar.Value = maxHp;
+		private TextEdit _nameEdit;
+		private Life _healthBar;
+		private Label _nameFocusLabel;
+		private Label _nameAttaquantLabel;
+		private Label _statsLabel;
+		private Label _classEmojiLabel;
+		private Sprite2D _deathStateSprite;
+		private ItemList _bonusList;
+		private ItemList _malusList;
+		private LogContainer _logContainer;
+		private ColorRect _overlayDeath;
+		private ColorRect _cardBackground;
 		
-		// Charger l'icône appropriée selon le type
-		LoadClassIcon(type);
-		
-		GD.Print($"[PersonnageUI] {name} ({type}) initialisé avec {maxHp} HP");
-	}
-	
-	/// <summary>
-	/// Met à jour les HP du personnage
-	/// </summary>
-	public void UpdateHP(int newHP)
-	{
-		CurrentHP = Math.Max(0, Math.Min(newHP, MaxHP));
-		_healthBar.Value = CurrentHP;
-		
-		// Si mort, afficher l'overlay
-		if (CurrentHP <= 0 && !IsDead)
+		public override void _Ready()
 		{
-			SetDead(true);
+			_nameEdit = GetNode<TextEdit>("TextEdit");
+			_healthBar = GetNode<Life>("HealthBar");
+			_nameFocusLabel = GetNode<Label>("Label_NameFocus");
+			_nameAttaquantLabel = GetNode<Label>("Label_NameAttaquant");
+			_statsLabel = GetNode<Label>("Label_Stats");
+			_classEmojiLabel = GetNode<Label>("ClassEmojiLabel");
+			_deathStateSprite = GetNode<Sprite2D>("Sprite2D_DeathState");
+			_bonusList = GetNode<ItemList>("Bonus");
+			_malusList = GetNode<ItemList>("Malus");
+			_logContainer = GetNode<LogContainer>("Logs-CollapsibleContainer/ScrollContainer/VBoxContainer");
+			_overlayDeath = GetNode<ColorRect>("ColorRect");
+			_cardBackground = GetNode<ColorRect>("ColorRect2");
+			
+			_deathStateSprite.Visible = false;
+			_overlayDeath.Visible = false;
+			_nameFocusLabel.Text = "";
+			_nameAttaquantLabel.Text = "";
+			_statsLabel.Text = "";
 		}
 		
-		GD.Print($"[PersonnageUI] {CharacterName} HP: {CurrentHP}/{MaxHP}");
-	}
-	
-	/// <summary>
-	/// Inflige des dégâts au personnage
-	/// </summary>
-	public void TakeDamage(int damage)
-	{
-		UpdateHP(CurrentHP - damage);
-		AddLog($"💥 Subit {damage} dégâts ! HP: {CurrentHP}/{MaxHP}");
-	}
-	
-	/// <summary>
-	/// Soigne le personnage
-	/// </summary>
-	public void Heal(int amount)
-	{
-		UpdateHP(CurrentHP + amount);
-		AddLog($"❤️ Soigné de {amount} HP ! HP: {CurrentHP}/{MaxHP}");
-	}
-	
-	/// <summary>
-	/// Définit l'état de mort du personnage
-	/// </summary>
-	public void SetDead(bool dead)
-	{
-		IsDead = dead;
-		_deathStateSprite.Visible = dead;
-		_overlayDeath.Visible = dead;
-		
-		if (dead)
+		public void InitializeCharacter(string name, string type, int maxHp = 100)
 		{
-			AddLog("💀 EST MORT !");
-			Modulate = new Color(0.5f, 0.5f, 0.5f); // Grisé
+			var characterClass = CharacterAssets.ParseClass(type);
+			CharacterData = new CharacterData(name, characterClass, maxHp);
+			
+			_nameEdit.Text = name;
+			_healthBar.MaxValue = maxHp;
+			_healthBar.Value = maxHp;
+			
+			SetClassEmoji(characterClass);
+			UpdateHealthBarColor();
+			UpdateStatsLabel();
+			
+			GD.Print($"[PersonnageUI] {name} ({type}) initialisé");
 		}
-		else
-		{
-			Modulate = Colors.White;
-		}
-	}
-	
-	/// <summary>
-	/// Met à jour la cible focalisée
-	/// </summary>
-	public void SetFocus(string targetName)
-	{
-		FocusTarget = targetName;
-		_nameFocusLabel.Text = targetName != "" ? $"🎯 Focus: {targetName}" : "";
-	}
-	
-	/// <summary>
-	/// Met à jour l'attaquant actuel
-	/// </summary>
-	public void SetAttacker(string attackerName)
-	{
-		Attacker = attackerName;
-		_nameAttaquantLabel.Text = attackerName != "" ? $"⚔️ Attaqué par: {attackerName}" : "";
-	}
-	
-	/// <summary>
-	/// Ajoute un bonus (buff)
-	/// </summary>
-	public void AddBonus(string bonusName, Texture2D icon = null)
-	{
-		_bonusList.AddItem(bonusName, icon);
-		AddLog($"✨ Bonus: {bonusName}");
-	}
-	
-	/// <summary>
-	/// Ajoute un malus (debuff)
-	/// </summary>
-	public void AddMalus(string malusName, Texture2D icon = null)
-	{
-		_malusList.AddItem(malusName, icon);
-		AddLog($"🩸 Malus: {malusName}");
-	}
-	
-	/// <summary>
-	/// Supprime tous les bonus/malus
-	/// </summary>
-	public void ClearEffects()
-	{
-		_bonusList.Clear();
-		_malusList.Clear();
-	}
-	
-	/// <summary>
-	/// Ajoute une entrée au journal de logs
-	/// </summary>
-	public void AddLog(string message)
-	{
-		var timestamp = DateTime.Now.ToString("HH:mm:ss");
-		var logMessage = $"[{timestamp}] {message}";
-		_logContainer.AddLog(logMessage);
-	}
-	
-	/// <summary>
-	/// Charge l'icône de classe appropriée
-	/// </summary>
-	private void LoadClassIcon(string type)
-	{
-		var iconPath = type.ToLower() switch
-		{
-			"guerrier" => "res://icons/rework/64x64/Guerrierx64.png",
-			"berserker" => "res://icons/rework/64x64/Berserkx64.png",
-			"magicien" => "res://icons/rework/64x64/Magicienx64.png",
-			"assassin" => "res://icons/rework/64x64/Assassinx64.png",
-			"pretre" => "res://icons/rework/64x64/Pretrex64.png",
-			"paladin" => "res://icons/rework/64x64/Paladinx64.png",
-			"necromancien" => "res://icons/rework/64x64/Necromancienx64.png",
-			"alchimiste" => "res://icons/rework/64x64/Alchimistex64.png",
-			"illusioniste" => "res://icons/rework/64x64/Illusionistex64.png",
-			"vampire" => "res://icons/rework/64x64/Vampirex64.png",
-			"zombie" => "res://icons/rework/64x64/Zombiex64.png",
-			"robot" => "res://icons/rework/64x64/Robotx64.png",
-			_ => "res://icons/rework/64x64/Berserkx64.png" // Default
-		};
 		
-		if (ResourceLoader.Exists(iconPath))
+		public void UpdateHP(int newHP)
 		{
-			_classeSprite.Texture = GD.Load<Texture2D>(iconPath);
+			CharacterData.CurrentHP = Math.Max(0, Math.Min(newHP, CharacterData.MaxHP));
+			_healthBar.Value = CharacterData.CurrentHP;
+			
+			UpdateHealthBarColor();
+			
+			if (CharacterData.CurrentHP <= 0 && !CharacterData.IsDead)
+			{
+				SetDead(true);
+			}
+			else if (CharacterData.CurrentHP > 0 && CharacterData.IsDead)
+			{
+				SetDead(false);
+			}
+		}
+		
+		public void TakeDamage(int damage, string attacker = "")
+		{
+			CharacterData.TotalDamageTaken += damage;
+			CharacterData.LastAttacker = attacker;
+			UpdateHP(CharacterData.CurrentHP - damage);
+			
+			var logEntry = new CombatLogEntry(
+CombatEventType.Damage,
+$"💥 Subit {damage} dégâts ! HP: {CharacterData.CurrentHP}/{CharacterData.MaxHP}",
+CharacterAssets.EventColors[CombatEventType.Damage]
+);
+			logEntry.SourceCharacter = attacker;
+			logEntry.TargetCharacter = CharacterData.Name;
+			logEntry.Value = damage;
+			
+			AddLogEntry(logEntry);
+			UpdateStatsLabel();
+			
+			if (!string.IsNullOrEmpty(attacker))
+			{
+				_nameAttaquantLabel.Text = $"Attaqué par: {attacker}";
+			}
+		}
+		
+		public void Heal(int amount, string healer = "")
+		{
+			int actualHealing = Math.Min(amount, CharacterData.MaxHP - CharacterData.CurrentHP);
+			CharacterData.TotalHealing += actualHealing;
+			UpdateHP(CharacterData.CurrentHP + amount);
+			
+			var logEntry = new CombatLogEntry(
+CombatEventType.Heal,
+$"❤️ Soigné de {actualHealing} HP ! HP: {CharacterData.CurrentHP}/{CharacterData.MaxHP}",
+CharacterAssets.EventColors[CombatEventType.Heal]
+);
+			logEntry.SourceCharacter = healer;
+			logEntry.TargetCharacter = CharacterData.Name;
+			logEntry.Value = actualHealing;
+			
+			AddLogEntry(logEntry);
+			UpdateStatsLabel();
+		}
+		
+		/// <summary>
+		/// Enregistre une attaque effectuée par ce personnage
+		/// </summary>
+		public void RegisterAttack(int damageDealt, string targetName)
+		{
+			CharacterData.TotalDamageDealt += damageDealt;
+			UpdateStatsLabel();
+			
+			var logEntry = new CombatLogEntry(
+				CombatEventType.Attack,
+				$"⚔️ Attaque {targetName} pour {damageDealt} dégâts !",
+				CharacterAssets.EventColors[CombatEventType.Attack]
+			);
+			logEntry.SourceCharacter = CharacterData.Name;
+			logEntry.TargetCharacter = targetName;
+			logEntry.Value = damageDealt;
+			
+			AddLogEntry(logEntry);
+		}
+		
+		public void SetDead(bool dead)
+		{
+			CharacterData.IsDead = dead;
+			_deathStateSprite.Visible = dead;
+			_overlayDeath.Visible = dead;
+			
+			if (dead)
+			{
+				CharacterData.DeathCount++;
+				UpdateStatsLabel();
+				var logEntry = new CombatLogEntry(
+CombatEventType.Death,
+"💀 EST MORT !",
+CharacterAssets.EventColors[CombatEventType.Death]
+);
+				AddLogEntry(logEntry);
+				Modulate = new Color(0.5f, 0.5f, 0.5f);
+			}
+			else
+			{
+				var logEntry = new CombatLogEntry(
+CombatEventType.Resurrection,
+"✨ RESSUSCITÉ !",
+CharacterAssets.EventColors[CombatEventType.Resurrection]
+);
+				AddLogEntry(logEntry);
+				Modulate = Colors.White;
+			}
+		}
+		
+		public void SetFocus(string targetName)
+		{
+			CharacterData.FocusTarget = targetName;
+			_nameFocusLabel.Text = targetName != "" ? $"🎯 Focus: {targetName}" : "";
+		}
+		
+		public void SetAttacker(string attackerName)
+		{
+			CharacterData.LastAttacker = attackerName;
+			_nameAttaquantLabel.Text = attackerName != "" ? $"⚔️ Attaqué par: {attackerName}" : "";
+		}
+		
+		public void AddStatusEffect(string effectName, bool isPositive, int duration = -1)
+		{
+			var effect = new StatusEffect(effectName, "", isPositive, duration);
+			CharacterData.ActiveEffects.Add(effect);
+			
+			var iconPath = CharacterAssets.GetEffectIcon(effectName);
+			Texture2D icon = null;
+			if (!string.IsNullOrEmpty(iconPath) && ResourceLoader.Exists(iconPath))
+			{
+				icon = ResourceLoader.Load<Texture2D>(iconPath);
+			}
+			
+			if (isPositive)
+			{
+				_bonusList.AddItem(effectName, icon);
+				var logEntry = new CombatLogEntry(
+CombatEventType.Buff,
+$"✨ Bonus: {effectName}",
+CharacterAssets.EventColors[CombatEventType.Buff]
+);
+				AddLogEntry(logEntry);
+			}
+			else
+			{
+				_malusList.AddItem(effectName, icon);
+				var logEntry = new CombatLogEntry(
+CombatEventType.Debuff,
+$"🩸 Malus: {effectName}",
+CharacterAssets.EventColors[CombatEventType.Debuff]
+);
+				AddLogEntry(logEntry);
+			}
+		}
+		
+		public void ClearEffects()
+		{
+			_bonusList.Clear();
+			_malusList.Clear();
+			CharacterData.ActiveEffects.Clear();
+		}
+		
+		public void AddLog(string message)
+		{
+			var logEntry = new CombatLogEntry(CombatEventType.StatusEffect, message);
+			AddLogEntry(logEntry);
+		}
+		
+		private void AddLogEntry(CombatLogEntry logEntry)
+		{
+			_logHistory.Add(logEntry);
+			
+			if (_logHistory.Count > 100)
+			{
+				_logHistory.RemoveAt(0);
+			}
+			
+			_logContainer.AddLog(logEntry.GetFormattedMessage());
+		}
+		
+		private void SetClassEmoji(CharacterClass characterClass)
+		{
+			_classEmojiLabel.Text = characterClass switch
+			{
+				// Classes backend confirmées - emojis détaillés
+				CharacterClass.Guerrier => "⚔️",      // Warrior
+				CharacterClass.Berserker => "🪓",     // Berserker (hache)
+				CharacterClass.Assassin => "🥷",      // Assassin (ninja) - plus simple
+				CharacterClass.Alchimiste => "⚗️",    // Alchemist (alambic)
+				CharacterClass.Illusioniste => "🔮",  // Illusionist
+				CharacterClass.Pretre => "✨",        // Priest
+				CharacterClass.Paladin => "🛡️",      // Paladin
+				CharacterClass.Zombie => "🧟",        // Zombie
+				CharacterClass.Vampire => "🧛",       // Vampire
+				CharacterClass.Robot => "🤖",         // Robot
+				// Classes supplémentaires frontend
+				CharacterClass.Magicien => "🧙",      // Wizard
+				CharacterClass.Necromancien => "💀",  // Necromancer
+				_ => "❓"
+			};
+		}
+		
+		private void UpdateHealthBarColor()
+		{
+			var hpPercentage = CharacterData.HPPercentage;
+			var color = CharacterAssets.GetHPBarColor(hpPercentage);
+			
+			var stylebox = _healthBar.GetThemeStylebox("fill") as StyleBoxFlat;
+			if (stylebox != null)
+			{
+				stylebox.BgColor = color;
+			}
+		}
+		
+		/// <summary>
+		/// Met à jour le label des stats de combat
+		/// </summary>
+		private void UpdateStatsLabel()
+		{
+			_statsLabel.Text = $"💀 {CharacterData.DeathCount}  |  " +
+			                  $"⚔ {CharacterData.TotalDamageDealt}  |  " +
+			                  $"🛡 {CharacterData.TotalDamageTaken}  |  " +
+			                  $"❤ {CharacterData.TotalHealing}";
+		}
+		
+		public string GetCombatStats()
+		{
+			return $"HP: {CharacterData.CurrentHP}/{CharacterData.MaxHP} | " +
+			       $"Dégâts infligés: {CharacterData.TotalDamageDealt} | " +
+			       $"Dégâts subis: {CharacterData.TotalDamageTaken} | " +
+			       $"Soins: {CharacterData.TotalHealing} | " +
+			       $"Kills: {CharacterData.KillCount} | " +
+			       $"Morts: {CharacterData.DeathCount}";
 		}
 	}
 }

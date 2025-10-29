@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://cntxl4f4jpgn0"]
+[gd_scene load_steps=2 format=3 uid="uid://chgbxgnkcklxd"]
 
-[ext_resource type="Script" path="res://Scripts/ViewManager.cs" id="1_view_manager"]
+[ext_resource type="Script" uid="uid://17e6dmoxemju" path="res://Scripts/ViewManager.cs" id="1_view_manager"]
 
 [node name="ViewManager" type="Control"]
 layout_mode = 3

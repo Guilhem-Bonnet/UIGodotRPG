@@ -19,8 +19,8 @@ namespace FrontBRRPG.UI
         private List<CharacterButton> _characterButtons = new List<CharacterButton>();
         private List<CharacterConfig> _selectedCharacters = new List<CharacterConfig>();
 
-        private const int MIN_CHARACTERS = 2;
-        private const int MAX_CHARACTERS = 10;
+    private const int MIN_CHARACTERS = 2;
+    private int _maxCharacters = 4;
 
         public override void _Ready()
         {
@@ -29,14 +29,37 @@ namespace FrontBRRPG.UI
             _selectionCountLabel = GetNode<Label>("MarginContainer/VBoxContainer/HeaderContainer/SelectionCountLabel");
             _selectionInfoLabel = GetNode<RichTextLabel>("MarginContainer/VBoxContainer/SelectionInfoLabel");
 
+            var maxCharactersSpinBox = GetNode<SpinBox>("MarginContainer/VBoxContainer/HeaderContainer/MaxCharactersSpinBox");
+            maxCharactersSpinBox.Value = _maxCharacters;
+            maxCharactersSpinBox.ValueChanged += OnMaxCharactersChanged;
+
             _startBattleButton.Pressed += OnStartBattlePressed;
 
-            CreateCharacterButtons();
+            LoadAvailableClassesAsync();
+            UpdateSelectionUI();
+        }
+        
+        private async void LoadAvailableClassesAsync()
+        {
+            var wsClient = GetNode<WebSocketClient>("/root/WebSocketClient");
+            var availableClasses = await wsClient.GetAvailableClassesAsync();
+            
+            GD.Print($"[CharacterSelection] Chargement de {availableClasses.Count} classes disponibles");
+            
+            foreach (var className in availableClasses)
+            {
+                var button = new CharacterButton(className);
+                button.Toggled += (bool pressed) => OnCharacterToggled(button, pressed);
+                _characterGrid.AddChild(button);
+                _characterButtons.Add(button);
+            }
+            
             UpdateSelectionUI();
         }
 
         private void CreateCharacterButtons()
         {
+            // Méthode dépréciée - utiliser LoadAvailableClassesAsync() à la place
             var characterTypes = CharacterTypes.All;
             
             foreach (var type in characterTypes)
@@ -52,10 +75,10 @@ namespace FrontBRRPG.UI
         {
             if (selected)
             {
-                if (_selectedCharacters.Count >= MAX_CHARACTERS)
+                if (_selectedCharacters.Count >= _maxCharacters)
                 {
                     button.SetPressedNoSignal(false);
-                    GD.Print($"[Selection] Maximum de {MAX_CHARACTERS} personnages atteint");
+                    GD.Print($"[Selection] Maximum de {_maxCharacters} personnages atteint");
                     return;
                 }
 
@@ -83,13 +106,13 @@ namespace FrontBRRPG.UI
         private void UpdateSelectionUI()
         {
             var count = _selectedCharacters.Count;
-            _selectionCountLabel.Text = $"Personnages sélectionnés: {count}/{MAX_CHARACTERS}";
+            _selectionCountLabel.Text = $"Personnages sélectionnés: {count}/{_maxCharacters}";
 
             var canStart = count >= MIN_CHARACTERS;
             _startBattleButton.Disabled = !canStart;
 
             // Afficher la liste des personnages sélectionnés
-            var info = "[color=#FFFF00]Personnages sélectionnés:[/color]\n";
+            var info = $"[color=#FFFF00]Personnages sélectionnés (max: {_maxCharacters}):[/color]\n";
             if (count == 0)
             {
                 info += "[color=#808080]Aucun personnage sélectionné[/color]";
@@ -108,6 +131,26 @@ namespace FrontBRRPG.UI
             }
 
             _selectionInfoLabel.Text = info;
+
+            // Désactiver les boutons si le max est atteint
+            foreach (var button in _characterButtons)
+            {
+                button.Disabled = (_selectedCharacters.Count >= _maxCharacters && !button.ButtonPressed);
+            }
+        }
+        private void OnMaxCharactersChanged(double value)
+        {
+            _maxCharacters = (int)value;
+            // Désélectionner les personnages en trop
+            while (_selectedCharacters.Count > _maxCharacters)
+            {
+                var last = _selectedCharacters.Last();
+                var btn = _characterButtons.FirstOrDefault(b => b.CharacterType == last.Type);
+                if (btn != null)
+                    btn.SetPressedNoSignal(false);
+                _selectedCharacters.Remove(last);
+            }
+            UpdateSelectionUI();
         }
 
         private void OnStartBattlePressed()
