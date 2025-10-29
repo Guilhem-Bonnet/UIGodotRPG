@@ -297,7 +297,34 @@ CharacterAssets.EventColors[CombatEventType.Debuff]
 			       $"Dégâts subis: {CharacterData.TotalDamageTaken} | " +
 			       $"Soins: {CharacterData.TotalHealing} | " +
 			       $"Kills: {CharacterData.KillCount} | " +
-			       $"Morts: {CharacterData.DeathCount}";
+		       $"Morts: {CharacterData.DeathCount}";
+	}
+	
+	/// <summary>
+	/// Met à jour un spell avec son cooldown actuel
+	/// </summary>
+	public void UpdateSpell(int spellIndex, float currentCooldown, float maxCooldown, string emoji)
+	{
+		// Récupérer le HBoxContainer qui contient les SpellButtons
+		var spellContainer = GetNodeOrNull<HBoxContainer>("PanelContainer/HBoxContainer");
+		if (spellContainer == null)
+		{
+			GD.PrintErr($"[PersonnageUI] Impossible de trouver le HBoxContainer pour {CharacterData.Name}");
+			return;
+		}
+		
+		// Récupérer le SpellButton correspondant (Spell, Spell2, Spell3, Spell4)
+		string spellNodeName = spellIndex == 0 ? "Spell" : $"Spell{spellIndex + 1}";
+		var spellButton = spellContainer.GetNodeOrNull<SpellButton>(spellNodeName);
+		
+		if (spellButton != null)
+		{
+			spellButton.UpdateCooldown(currentCooldown, maxCooldown, emoji);
+		}
+		else
+		{
+			GD.PrintErr($"[PersonnageUI] SpellButton '{spellNodeName}' introuvable pour {CharacterData.Name}");
 		}
 	}
+}
 }

@@ -7,7 +7,7 @@ using System;
 public partial class LogContainer : VBoxContainer
 {
     [Export] public int MaxLogs { get; set; } = 50;
-    [Export] public bool AutoScroll { get; set; } = true;
+    [Export] public bool AutoScroll { get; set; } = false; // DÉSACTIVÉ PAR DÉFAUT pour pouvoir lire les logs
     
     private PackedScene _logComponentScene;
     private ScrollContainer _scrollContainer;

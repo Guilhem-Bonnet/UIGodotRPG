@@ -58,6 +58,7 @@ namespace FrontBRRPG.Testing
 			
 			foreach (var card in characterCards)
 			{
+				// Utiliser les vraies données de la carte
 				var simChar = new SimulatedCharacter
 				{
 					Name = card.CharacterData.Name,
@@ -66,16 +67,18 @@ namespace FrontBRRPG.Testing
 					MaxHP = card.CharacterData.MaxHP,
 					Attack = 25 + _random.Next(-5, 10),
 					Defense = 15 + _random.Next(-3, 8),
-					Card = card
+					Card = card // Référence à la carte UI réelle !
 				};
 				
-				// Créer des skills de test
+				// Créer des skills de test basés sur la classe
 				simChar.Skills = CreateTestSkills(simChar.Type);
 				
 				_characters.Add(simChar);
+				
+				GD.Print($"[CombatSimulator] 🎴 {card.CharacterData.Name} ({simChar.Type}) lié à sa carte UI");
 			}
 			
-			GD.Print($"[CombatSimulator] {_characters.Count} personnages initialisés");
+			GD.Print($"[CombatSimulator] ✅ {_characters.Count} personnages initialisés et liés aux cartes UI");
 		}
 		
 		/// <summary>
@@ -168,32 +171,36 @@ namespace FrontBRRPG.Testing
 				damage = (int)(damage * 1.5f);
 			}
 			
-			// Appliquer les dégâts
+			// Appliquer les dégâts via la carte UI !
 			target.CurrentHP = Mathf.Max(0, target.CurrentHP - damage);
-			target.Card.UpdateHP(target.CurrentHP);
+			target.Card.TakeDamage(damage, attacker.Name); // Utilise la méthode TakeDamage de la carte
 			
 			// Log
 			string critText = isCritical ? " 💥 CRITIQUE !" : "";
 			EmitCombatLog($"⚔️ {attacker.Name} attaque {target.Name} pour {damage} dégâts{critText}", 
 				isCritical ? "#FF0000" : "#FFAA00");
 			
-		// Vérifier la mort
-		if (target.CurrentHP <= 0 && !target.IsDead)
-		{
-			target.IsDead = true;
-			target.Card.SetDead(true);
-			EmitCombatLog($"💀 {target.Name} est mort !", "#FF0000");
-		}
-		
-		// Émettre l'action
-		EmitSignal(SignalName.ActionPerformed, "attack", attacker.Name, target.Name);
-	}		/// <summary>
+			// Vérifier la mort (la carte gère automatiquement l'état de mort dans TakeDamage)
+			if (target.CurrentHP <= 0 && !target.IsDead)
+			{
+				target.IsDead = true;
+				EmitCombatLog($"💀 {target.Name} est mort !", "#FF0000");
+			}
+			
+			// Émettre l'action
+			EmitSignal(SignalName.ActionPerformed, "attack", attacker.Name, target.Name);
+		}		/// <summary>
+		/// <summary>
 		/// Simule l'utilisation d'un skill
 		/// </summary>
 		private void ExecuteSkill(SimulatedCharacter caster, SimulatedCharacter target, SimulatedSkill skill)
 		{
 			// Déclencher le cooldown
 			skill.CurrentCooldown = skill.BaseCooldown;
+			// Log du chargement du skill
+			int chargePercent = 100; // Skill prêt = 100%
+			caster.Card.AddLog($"⚡ {skill.Name} [Charge: {chargePercent}%] - ACTIVATION !");
+			EmitCombatLog($"⚡ {caster.Name} active {skill.Name} (Charge: {chargePercent}%)", "#FFFF00");
 			
 			switch (skill.Name)
 			{
@@ -202,6 +209,7 @@ namespace FrontBRRPG.Testing
 					caster.CurrentHP = Mathf.Min(caster.MaxHP, caster.CurrentHP + healing);
 					caster.Card.Heal(healing, caster.Name);
 					EmitCombatLog($"✨ {caster.Name} se soigne de {healing} HP", "#00FF88");
+					caster.Card.AddLog($"✨ Soin: +{healing} HP");
 					break;
 					
 				case "Rage":
@@ -209,50 +217,128 @@ namespace FrontBRRPG.Testing
 					target.CurrentHP = Mathf.Max(0, target.CurrentHP - rageDamage);
 					target.Card.TakeDamage(rageDamage, caster.Name);
 					EmitCombatLog($"🔥 {caster.Name} utilise Rage sur {target.Name} pour {rageDamage} dégâts !", "#FF4400");
+					caster.Card.AddLog($"🔥 Rage: {rageDamage} dégâts infligés");
+					target.Card.AddLog($"🔥 Rage de {caster.Name}: {rageDamage} dégâts");
 					
 					if (target.CurrentHP <= 0 && !target.IsDead)
 					{
 						target.IsDead = true;
-						target.Card.SetDead(true);
 						EmitCombatLog($"💀 {target.Name} est mort !", "#FF0000");
 					}
 					break;
 					
-				case "Bouclier":
-					// Simuler un buff de bouclier (à implémenter dans l'UI)
-					caster.Card.AddStatusEffect("Bouclier", true, 3);
-					EmitCombatLog($"🛡️ {caster.Name} active Bouclier (3 tours)", "#00AAFF");
+			case "Bouclier":
+				// Ajouter le buff de bouclier directement sur la carte UI
+				caster.Card.AddStatusEffect("🛡 Bouclier", true, 3);
+				EmitCombatLog($"🛡 {caster.Name} active Bouclier (+20 DEF, 3 tours)", "#00AAFF");
+				caster.Card.AddLog($"🛡 Bouclier activé (+20 DEF, 3 tours)");
+				break;			case "Poison":
+				// Ajouter le debuff de poison directement sur la carte UI
+				target.Card.AddStatusEffect("🤢 Poison", false, 5);
+				EmitCombatLog($"� {caster.Name} empoisonne {target.Name} (-5 HP/tour, 5 tours)", "#88FF00");
+				caster.Card.AddLog($"🤢 {target.Name} empoisonné !");
+				target.Card.AddLog($"🤢 Empoisonné par {caster.Name} (-5 HP/tour)");
+				break;				case "Force":
+					// Buff d'attaque
+					caster.Card.AddStatusEffect("💪 Force", true, 4);
+					caster.Attack += 10;
+					EmitCombatLog($"💪 {caster.Name} gagne Force (+10 ATK, 4 tours)", "#FFD700");
+					caster.Card.AddLog($"💪 Force activée (+10 ATK, 4 tours)");
 					break;
 					
-				case "Poison":
-					// Simuler un debuff de poison
-					target.Card.AddStatusEffect("Empoisonné", false, 5);
-				EmitCombatLog($"🧪 {caster.Name} empoisonne {target.Name} (5 tours)", "#88FF00");
-				break;
-		}
-		
-		EmitSignal(SignalName.ActionPerformed, "skill", caster.Name, target.Name);
-	}		/// <summary>
+			case "Affaiblissement":
+				// Debuff d'attaque
+				target.Card.AddStatusEffect("😰 Affaibli", false, 3);
+				target.Attack = Math.Max(5, target.Attack - 10);
+				EmitCombatLog($"� {target.Name} est affaibli (-10 ATK, 3 tours)", "#AA5500");
+				caster.Card.AddLog($"😰 {target.Name} affaibli !");
+				target.Card.AddLog($"😰 Affaibli par {caster.Name} (-10 ATK)");
+				break;				case "Régénération":
+					// Buff de régénération (soin sur durée)
+					caster.Card.AddStatusEffect("💚 Régénération", true, 5);
+					EmitCombatLog($"💚 {caster.Name} active Régénération (+10 HP/tour, 5 tours)", "#00FF44");
+					caster.Card.AddLog($"💚 Régénération active (+10 HP/tour)");
+					break;
+					
+				case "Brûlure":
+					// Debuff de brûlure (dégâts sur durée)
+					target.Card.AddStatusEffect("🔥 Brûlure", false, 4);
+					EmitCombatLog($"🔥 {target.Name} brûle (-8 HP/tour, 4 tours)", "#FF4400");
+					caster.Card.AddLog($"🔥 {target.Name} en feu !");
+					target.Card.AddLog($"🔥 Brûlure de {caster.Name} (-8 HP/tour)");
+					break;
+			}
+			
+			EmitSignal(SignalName.ActionPerformed, "skill", caster.Name, target.Name);
+		}		/// <summary>
 		/// Met à jour les cooldowns de tous les skills
 		/// </summary>
-		private void UpdateCooldowns(float delta)
+	private void UpdateCooldowns(float delta)
+	{
+		foreach (var character in _characters)
 		{
-			foreach (var character in _characters)
+			for (int i = 0; i < character.Skills.Count; i++)
 			{
-				foreach (var skill in character.Skills)
+				var skill = character.Skills[i];
+				
+				if (skill.CurrentCooldown > 0)
 				{
-					if (skill.CurrentCooldown > 0)
+					float oldCooldown = skill.CurrentCooldown;
+					skill.CurrentCooldown = Mathf.Max(0, skill.CurrentCooldown - delta);
+					
+					// Log quand un skill devient prêt (passe de >0 à 0)
+					if (oldCooldown > 0 && skill.CurrentCooldown == 0 && skill.Name != "Attaque Base")
 					{
-						skill.CurrentCooldown = Mathf.Max(0, skill.CurrentCooldown - delta);
+						int chargePercent = 100;
+						character.Card.AddLog($"✅ {skill.Name} prêt ! [Charge: {chargePercent}%]");
+						EmitCombatLog($"✅ {character.Name} : {skill.Name} rechargé !", "#00FF88");
+					}
+					// Log périodique du chargement (tous les 25%)
+					else if (skill.CurrentCooldown > 0 && skill.Name != "Attaque Base")
+					{
+						int currentCharge = skill.ChargePercent;
+						int oldCharge = (int)((skill.BaseCooldown - oldCooldown) / skill.BaseCooldown * 100);
+						
+						// Log tous les 25% de progression
+						if ((currentCharge >= 75 && oldCharge < 75) || 
+						    (currentCharge >= 50 && oldCharge < 50) || 
+						    (currentCharge >= 25 && oldCharge < 25))
+						{
+							character.Card.AddLog($"⏳ {skill.Name} en charge... [{currentCharge}%]");
+						}
 					}
 				}
+				
+				// Mettre à jour le bouton de spell UI avec le cooldown actuel
+				string emoji = GetSkillEmoji(skill.Name);
+				character.Card.UpdateSpell(i, skill.CurrentCooldown, skill.BaseCooldown, emoji);
 			}
 		}
-		
-		/// <summary>
-		/// Crée des skills de test basés sur le type de personnage
-		/// </summary>
-		private List<SimulatedSkill> CreateTestSkills(string characterType)
+	}
+	
+	/// <summary>
+	/// Retourne l'emoji correspondant au nom du skill
+	/// </summary>
+	private string GetSkillEmoji(string skillName)
+	{
+		return skillName switch
+		{
+			"Attaque Base" => "⚔️",
+			"Soin" => "✨",
+			"Rage" => "🔥",
+			"Bouclier" => "🛡",
+			"Poison" => "🤢",
+			"Force" => "💪",
+			"Affaiblissement" => "😰",
+			"Régénération" => "💚",
+			"Brûlure" => "🔥",
+			_ => "❓"
+		};
+	}
+	/// <summary>
+	/// Crée des skills de test en fonction du type de personnage
+	/// </summary>
+	private List<SimulatedSkill> CreateTestSkills(string characterType)
 		{
 			var skills = new List<SimulatedSkill>
 			{
@@ -260,35 +346,45 @@ namespace FrontBRRPG.Testing
 			};
 			
 			// Skills spécifiques selon la classe
-			switch (characterType)
+			switch (characterType.ToLower())
 			{
-				case "Guerrier":
-				case "Berserker":
-					skills.Add(new SimulatedSkill { Name = "Rage", BaseCooldown = 5.0f, CurrentCooldown = 0 });
+				case "guerrier":
+				case "berserker":
+					skills.Add(new SimulatedSkill { Name = "Rage", BaseCooldown = 6.0f, CurrentCooldown = 0 });
 					skills.Add(new SimulatedSkill { Name = "Bouclier", BaseCooldown = 8.0f, CurrentCooldown = 0 });
+					skills.Add(new SimulatedSkill { Name = "Force", BaseCooldown = 10.0f, CurrentCooldown = 0 });
 					break;
 					
-				case "Pretre":
-				case "Paladin":
-					skills.Add(new SimulatedSkill { Name = "Soin", BaseCooldown = 4.0f, CurrentCooldown = 0 });
-					skills.Add(new SimulatedSkill { Name = "Bouclier", BaseCooldown = 6.0f, CurrentCooldown = 0 });
+				case "pretre":
+				case "paladin":
+					skills.Add(new SimulatedSkill { Name = "Soin", BaseCooldown = 5.0f, CurrentCooldown = 0 });
+					skills.Add(new SimulatedSkill { Name = "Bouclier", BaseCooldown = 7.0f, CurrentCooldown = 0 });
+					skills.Add(new SimulatedSkill { Name = "Régénération", BaseCooldown = 9.0f, CurrentCooldown = 0 });
 					break;
 					
-				case "Assassin":
-				case "Illusioniste":
+				case "assassin":
+				case "illusioniste":
 					skills.Add(new SimulatedSkill { Name = "Poison", BaseCooldown = 6.0f, CurrentCooldown = 0 });
-					skills.Add(new SimulatedSkill { Name = "Rage", BaseCooldown = 4.0f, CurrentCooldown = 0 });
+					skills.Add(new SimulatedSkill { Name = "Affaiblissement", BaseCooldown = 7.0f, CurrentCooldown = 0 });
+					skills.Add(new SimulatedSkill { Name = "Rage", BaseCooldown = 5.0f, CurrentCooldown = 0 });
+					break;
+					
+				case "magicien":
+				case "mage":
+					skills.Add(new SimulatedSkill { Name = "Brûlure", BaseCooldown = 5.0f, CurrentCooldown = 0 });
+					skills.Add(new SimulatedSkill { Name = "Poison", BaseCooldown = 7.0f, CurrentCooldown = 0 });
+					skills.Add(new SimulatedSkill { Name = "Affaiblissement", BaseCooldown = 8.0f, CurrentCooldown = 0 });
 					break;
 					
 				default:
 					skills.Add(new SimulatedSkill { Name = "Rage", BaseCooldown = 5.0f, CurrentCooldown = 0 });
+					skills.Add(new SimulatedSkill { Name = "Soin", BaseCooldown = 6.0f, CurrentCooldown = 0 });
 					break;
 			}
 			
+			GD.Print($"[CombatSimulator] 🎯 {characterType} avec {skills.Count} skills : {string.Join(", ", skills.Select(s => s.Name))}");
 			return skills;
-		}
-		
-		/// <summary>
+		}		/// <summary>
 		/// Émet un log de combat
 		/// </summary>
 		private void EmitCombatLog(string message, string colorHex)

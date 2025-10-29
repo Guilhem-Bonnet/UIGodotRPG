@@ -80,7 +80,7 @@ public partial class TestEnvironment : Control
 		GD.Print("🎮 [TestEnvironment] Création du simulateur...");
 		_simulator = new CombatSimulator();
 		_simulator.ActionInterval = 1.5f; // Action toutes les 1.5s
-		_simulator.AutoPlay = false; // Démarre en pause
+		_simulator.AutoPlay = true; // DÉMARRAGE AUTOMATIQUE !
 		AddChild(_simulator);
 		GD.Print("🎮 [TestEnvironment] Simulateur ajouté comme enfant");
 		
@@ -88,8 +88,8 @@ public partial class TestEnvironment : Control
 		_simulator.CombatLog += OnSimulatorLog;
 		GD.Print("🎮 [TestEnvironment] Signal CombatLog connecté");
 		
-		AddLog("🎮 Mode Simulateur activé - Pas de connexion backend nécessaire");
-		AddLog("⌨️  Contrôles: 1=Attaque 2=Soin 3=Mort 4=Résurrection 5=Statut ESPACE=Play/Pause");
+		AddLog("🎮 Mode Simulateur activé - Combat démarre automatiquement !");
+		AddLog("⌨️  Contrôles: ESPACE=Pause/Reprendre | 1-5=Tests manuels");
 	}		// Initialiser le parser
 		_parser = new CombatLogParser();
 		AddChild(_parser);
@@ -112,8 +112,9 @@ public partial class TestEnvironment : Control
 		var profiles = _profileGrid.GetCharacterProfiles();
 		GD.Print($"🎮 [TestEnvironment] Nombre de profils récupérés: {profiles.Count}");
 		_simulator.Initialize(profiles);
+		_simulator.Start(); // DÉMARRER LE COMBAT AUTOMATIQUEMENT !
 		AddLog($"✅ Simulateur initialisé avec {profiles.Count} personnages");
-		AddLog("⏸️  Simulateur en PAUSE - Appuyez sur ESPACE pour démarrer");
+		AddLog("▶️  Combat AUTO-DÉMARRÉ ! Appuyez sur ESPACE pour mettre en pause");
 	}		// Connexion automatique si activée (et simulateur désactivé)
 		if (!UseSimulator && AutoConnect && !_wsClient.IsConnected)
 		{

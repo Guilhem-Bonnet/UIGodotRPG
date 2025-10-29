@@ -111,12 +111,13 @@ max_columns = 20
 [node name="ColorRect" type="ColorRect" parent="."]
 visible = false
 layout_mode = 0
-offset_left = 3.0
-offset_right = 497.0
-offset_bottom = 347.0
+offset_top = 1.0
+offset_right = 210.0
+offset_bottom = 146.0
 color = Color(0, 0, 0, 0.588235)
 
 [node name="Sprite2D_DeathState" type="Sprite2D" parent="."]
+visible = false
 texture_filter = 4
 position = Vector2(136, 15)
 scale = Vector2(0.15, 0.15)
@@ -184,7 +185,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
-layout_mode = 2
+layout_mode = 0
 offset_left = 1.0
 offset_top = 96.0
 offset_right = 176.0

@@ -6,11 +6,11 @@ public partial class SpellBar : HBoxContainer
     // Chemin de la scène SpellButton
     private PackedScene spellButtonScene = GD.Load<PackedScene>("res://Components/SpellButton.tscn");
 
-    public void AddSpell(Texture2D icon, float cooldown)
+    public void AddSpell(string emoji, float cooldown)
     {
         // Instancier le SpellButton
         SpellButton spellButtonInstance = (SpellButton)spellButtonScene.Instantiate();
-        spellButtonInstance.SetSpellIconAndCooldown(icon, cooldown);
+        spellButtonInstance.SetSpellIconAndCooldown(emoji, cooldown);
 
         // Connecter le signal de clic en utilisant Callable
         spellButtonInstance.Connect("pressed", Callable.From(() => spellButtonInstance.OnSpellPressed()));
